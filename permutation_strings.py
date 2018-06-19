@@ -50,14 +50,16 @@ def shortest(symbols):
     if len(symbols) > 0:
         permutations = permute(symbols)
         perm = permute(symbols[:-1])
-        perm_start_len = len(perm[0])-1
+        SYM_LEN = len(perm[0])-1
         string = perm[0] + symbols[-1] + perm[0]
         perm.remove(perm[0])
         attempt = 0
+        STRING = string
+        PERM = perm
         verified = verify(permutations, string, symbols)
         while not verified:
             perm_len = len(perm)
-            for i, j in itertools.product(range(perm_start_len, 0, -1), range(perm_len)):
+            for i, j in itertools.product(range(SYM_LEN, 0, -1), range(perm_len)):
                 if string[-i:] == perm[j][:i]:
                     string = string[:-i] + perm[j] + symbols[-1] + perm[j]
                     perm.remove(perm[j])
@@ -68,10 +70,8 @@ def shortest(symbols):
                 verified = verify(permutations, string, symbols)
             if not verified and len(perm) == perm_len:
                 attempt += 1
-                perm = permute(symbols[:-1])
-                string = perm[0] + symbols[-1] + perm[0]
-                perm.remove(perm[0])
-                perm = shuffle(perm, attempt)
+                string = STRING
+                perm = shuffle(PERM, attempt)
         return string
     else:
         return ""
